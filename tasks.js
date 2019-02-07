@@ -2,30 +2,21 @@ const serverless = require('serverless-http');
 const express = require('express');
 const app = express();
 
+const databaseService = require('./databaseservice');
+
 app.get('/tasks', function (request, response) {
 
+  databaseService.getTasks()
+    .then(function (results) {
+      //we got tasks ok
 
-
-  const someTasks = [
-    {
-      id: 1,
-      description: 'Go Shopping',
-      completed: false
-    },
-    {
-      id: 2,
-      description: 'Cook the Food',
-      Completed: false
-    },
-    {
-      id: 3,
-      description: 'Eat The Dinner',
-      completed: false
-    }
-  ];
-
-  response.json(someTasks);
-
+      response.json(results);
+    })
+    .catch(function (error) {
+      // something went wrong when getting task
+      response.status(500);
+        response.json(error);
+    });
 })
 
 module.exports.handler = serverless(app);
