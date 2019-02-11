@@ -17,7 +17,15 @@ app.get('/tasks', function (request, response) {
       response.status(500);
         response.json(error);
     });
-})
+});
+
+app.delete('/tasks', function (request, response){
+  const someMessage= {
+    message: "you issued a delete rquest"
+  };
+
+  response.json(someMessage);
+});
 
 module.exports.handler = serverless(app);
 
