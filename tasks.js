@@ -1,7 +1,7 @@
 const serverless = require('serverless-http');
 const express = require('express');
 const app = express();
-
+app.use(express.json());
 const databaseService = require('./databaseservice');
 
 app.get('/tasks', function (request, response) {
@@ -18,6 +18,18 @@ app.get('/tasks', function (request, response) {
       response.json(error);
     });
 });
+
+
+app.post('/tasks', function (request, response) {
+
+  console.log("you sent a task saying:" + request.body.taskDescription );
+
+  response.json({ message: "you did a post" });
+
+})
+
+
+
 
 app.delete('/tasks/:taskId', function (request, response) {
   const taskIdToBeCompleted = request.params.taskId;
