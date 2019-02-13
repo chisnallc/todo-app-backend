@@ -15,14 +15,24 @@ app.get('/tasks', function (request, response) {
     .catch(function (error) {
       // something went wrong when getting task
       response.status(500);
-        response.json(error);
+      response.json(error);
     });
 });
 
-app.delete('/tasks', function (request, response){
-  const someMessage= {
-    message: "you issued a delete rquest"
+app.delete('/tasks/:taskId', function (request, response) {
+  const taskIdToBeCompleted = request.params.taskId;
+
+  let someMessage = {
+    message: "you issued a delete rquest for ID:" + taskIdToBeCompleted
   };
+
+  if (taskIdToBeCompleted > 3) {
+    response.status(404);
+    someMessage = {
+      message: "Task" + taskIdToBeCompleted + "Does not exist"
+    };
+  }
+
 
   response.json(someMessage);
 });
