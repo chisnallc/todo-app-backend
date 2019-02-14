@@ -2,9 +2,9 @@ const serverless = require('serverless-http');
 const express = require('express');
 const app = express();
 app.use(express.json());
-const databaseService = require('./databaseservice');
+const databaseService = require("./databaseservice");
 
-app.get('/tasks', function (request, response) {
+app.get("/tasks", function (request, response) {
 
   databaseService.getTasks()
     .then(function (results) {
@@ -20,28 +20,34 @@ app.get('/tasks', function (request, response) {
 });
 
 
-app.post('/tasks', function (request, response) {
+app.post("/tasks", function (request, response) {
 
-  console.log("you sent a task saying:" + request.body.taskDescription );
+  const taskDescription = request.body.taskDescription;
+  databaseService.saveTask(taskDescription).then(function (results) {
+    response.json(results);
+  })
+    .catch(function (error) {
+      response.status(500);
+      response.json(error);
+    });
 
-  response.json({ message: "you did a post" });
 
 })
 
 
 
 
-app.delete('/tasks/:taskId', function (request, response) {
-  const taskIdToBeCompleted = request.params.taskId;
+app.delete("/tasks/:taskId", function (request, response) {
+  const deleteTaskFromTable = request.params.taskId;
 
   let someMessage = {
     message: "you issued a delete rquest for ID:" + taskIdToBeCompleted
   };
 
-  if (taskIdToBeCompleted > 3) {
+  if (deleteTaskFromTable > 3) {
     response.status(404);
     someMessage = {
-      message: "Task" + taskIdToBeCompleted + "Does not exist"
+      message: "Task" + deleteTaskFromTable + "Does not exist"
     };
   }
 

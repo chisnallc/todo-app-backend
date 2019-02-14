@@ -26,3 +26,5 @@ functions:
           path: tasks/{taskId}
           method: delete
           cors: true
+      
+               

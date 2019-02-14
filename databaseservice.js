@@ -30,15 +30,20 @@ function saveTask(taskDescription) {
 
     return new Promise(function (resolve, reject) {
 
-        const post = { id: 1, title: 'Hello MySQL' };
-        connection.query('INSERT INTO tasks SET ?', post, function (error, results, fields) {
+        const postData =
+        {
+            taskDescription: taskDescription,
+            taskCompleted: false,
+            userId: 1
+        };
+        connection.query('INSERT INTO tasks SET ?', postData, function (error, results, fields) {
             if (error) {
                 connection.destroy();
                 return reject(error);
             }
             else {
-               connection.end();
-               return resolve(results);
+                connection.end();
+                return resolve(results);
 
             }
 
@@ -48,9 +53,32 @@ function saveTask(taskDescription) {
 
 }
 
+function deleteTask(deleteTaskFromTable) {
+    const connection = getDatabaseConnection();
+
+    return new Promise(function (resolve, reject) {
+
+        
+        connection.query('DELETE FROM Tasks WHERE TaskId = ?', deleteTaskFromTable, function (error, results, fields) {
+            if (error) {
+                connection.destroy();
+                return reject(error);
+            }
+            else {
+                connection.end();
+                return resolve(results);
+
+            }
+
+        });
+
+    });
+
+}
 module.exports = {
     getTasks,
-    saveTask
+    saveTask,
+    deleteTask
 }
 
 
