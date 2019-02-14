@@ -59,7 +59,7 @@ function deleteTask(deleteTaskFromTable) {
     return new Promise(function (resolve, reject) {
 
         
-        connection.query('DELETE FROM Tasks WHERE TaskId = ?', deleteTaskFromTable, function (error, results, fields) {
+        connection.query('DELETE FROM tasks WHERE taskId = 2', deleteTaskFromTable, function (error, results, fields) {
             if (error) {
                 connection.destroy();
                 return reject(error);

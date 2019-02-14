@@ -40,19 +40,13 @@ app.post("/tasks", function (request, response) {
 app.delete("/tasks/:taskId", function (request, response) {
   const deleteTaskFromTable = request.params.taskId;
 
-  let someMessage = {
-    message: "you issued a delete rquest for ID:" + taskIdToBeCompleted
-  };
-
-  if (deleteTaskFromTable > 3) {
-    response.status(404);
-    someMessage = {
-      message: "Task" + deleteTaskFromTable + "Does not exist"
-    };
-  }
-
-
-  response.json(someMessage);
+   databaseService.deleteTask(deleteTaskFromTable).then(function (results) {
+    response.json(results);
+  })
+    .catch(function (error) {
+      response.status(500);
+      response.json(error);
+    });
 });
 
 module.exports.handler = serverless(app);
