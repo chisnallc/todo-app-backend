@@ -1,7 +1,11 @@
 const serverless = require('serverless-http');
 const express = require('express');
 const app = express();
+const cors = require('cors');
+
 app.use(express.json());
+app.use(cors());
+
 const databaseService = require("./databaseservice");
 
 app.get("/tasks", function (request, response) {
@@ -48,6 +52,7 @@ app.delete("/tasks/:taskId", function (request, response) {
       response.json(error);
     });
 });
+
 
 module.exports.handler = serverless(app);
 
