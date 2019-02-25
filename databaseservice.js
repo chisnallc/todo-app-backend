@@ -8,11 +8,30 @@ function getDatabaseConnection() {
         database: process.env.RDS_DATABASE
     });
 }
-
+///connection to mysql
 function getTasks() {
     const connection = getDatabaseConnection();
     return new Promise(function (resolve, reject) {
         connection.query("SELECT * FROM tasks", function (error, results, fields) {
+            if (error) {
+                connection.destroy();
+                return reject(error);
+            }///connection to mysql returns. asyncrenous code
+            else {
+                connection.end();
+                return resolve(results);
+            }
+        });
+    });
+}
+
+function updateTask(deleteTaskFromTable) {
+    const connection = getDatabaseConnection();
+
+    return new Promise(function (resolve, reject) {
+
+
+        connection.query('UPDATE Tasks SET Completed = True WHERE TaskId = ?', deleteTaskFromTable, function (error, results, fields) {
             if (error) {
                 connection.destroy();
                 return reject(error);
@@ -22,8 +41,13 @@ function getTasks() {
                 return resolve(results);
             }
         });
+
     });
+
 }
+
+
+
 
 function saveTask(taskDescription) {
     const connection = getDatabaseConnection();
@@ -53,13 +77,15 @@ function saveTask(taskDescription) {
 
 }
 
+
+
 function deleteTask(deleteTaskFromTable) {
     const connection = getDatabaseConnection();
 
     return new Promise(function (resolve, reject) {
 
         
-        connection.query('DELETE FROM tasks WHERE taskId = 2', deleteTaskFromTable, function (error, results, fields) {
+        connection.query('DELETE FROM tasks WHERE taskId = ?', deleteTaskFromTable, function (error, results, fields) {
             if (error) {
                 connection.destroy();
                 return reject(error);
@@ -78,7 +104,8 @@ function deleteTask(deleteTaskFromTable) {
 module.exports = {
     getTasks,
     saveTask,
-    deleteTask
+    deleteTask,
+    updateTask
 }
 
 
