@@ -52,5 +52,21 @@ app.delete("/tasks/:taskId", function (request, response) {
       response.json(error);
     });
 });
+
+app.put("/tasks", function (request, response) {
+  const taskDescription = request.body.taskDescription;
+
+   databaseService.updateTask(taskDescription).then(function (results) {
+    response.json(results);
+  })
+    .catch(function (error) {
+      response.status(500);
+      response.json(error);
+    });
+});
+
+
+
+
 module.exports.handler = serverless(app);
 
