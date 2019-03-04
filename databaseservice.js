@@ -91,8 +91,10 @@ function deleteTask(deleteTaskFromTable) {
                 return reject(error);
             }
             else {
-                connection.end();
-                return resolve(results);
+                connection.end( function () {
+                    return resolve(results);
+                });
+               
 
             }
 
