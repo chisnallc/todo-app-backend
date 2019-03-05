@@ -18,12 +18,17 @@ function getTasks() {
                 return reject(error);
             }///connection to mysql returns. asyncrenous code
             else {
-                connection.end();
-                return resolve(results);
+                connection.end(function () {
+                    return resolve(results);
+                });
+
             }
+
         });
+
     });
 }
+
 
 function updateTask(deleteTaskFromTable) {
     const connection = getDatabaseConnection();
@@ -37,14 +42,17 @@ function updateTask(deleteTaskFromTable) {
                 return reject(error);
             }
             else {
-                connection.end();
-                return resolve(results);
+                connection.end(function () {
+                    return resolve(results);
+                });
+
             }
+
         });
 
     });
-
 }
+
 
 
 
@@ -66,50 +74,51 @@ function saveTask(taskDescription) {
                 return reject(error);
             }
             else {
-                connection.end();
-                return resolve(results);
+                connection.end(function () {
+                    return resolve(results);
+
+                });
 
             }
 
         });
 
     });
-
 }
 
 
 
 function deleteTask(deleteTaskFromTable) {
-    const connection = getDatabaseConnection();
+            const connection = getDatabaseConnection();
 
-    return new Promise(function (resolve, reject) {
+            return new Promise(function (resolve, reject) {
 
+
+                connection.query('DELETE FROM tasks WHERE taskId = ?', deleteTaskFromTable, function (error, results, fields) {
+                    if (error) {
+                        connection.destroy();
+                        return reject(error);
+                    }
+                    else {
+                        connection.end(function () {
+                            return resolve(results);
+
+                        });
+
+                    }
         
-        connection.query('DELETE FROM tasks WHERE taskId = ?', deleteTaskFromTable, function (error, results, fields) {
-            if (error) {
-                connection.destroy();
-                return reject(error);
-            }
-            else {
-                connection.end( function () {
-                    return resolve(results);
                 });
-               
-
-            }
-
-        });
-
-    });
-
-}
+        
+            });
+        }
+        
 module.exports = {
-    getTasks,
-    saveTask,
-    deleteTask,
-    updateTask
-    
-}
+            getTasks,
+            saveTask,
+            deleteTask,
+            updateTask
+
+        }
 
 
 
