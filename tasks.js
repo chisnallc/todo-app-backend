@@ -53,10 +53,10 @@ app.delete("/tasks/:taskId", function (request, response) {
     });
 });
 
-app.put("/tasks", function (request, response) {
-  const taskDescription = request.body.taskDescription;
+app.put("/tasks/:taskId", function (request, response) {
+  const taskId = request.params.taskId;
 
-   databaseService.updateTask(taskDescription).then(function (results) {
+   databaseService.updateTask(taskId).then(function (results) {
     response.json(results);
   })
     .catch(function (error) {
